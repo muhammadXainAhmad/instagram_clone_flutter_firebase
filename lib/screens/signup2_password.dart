@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone_flutter_firebase/screens/signup4_username.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/elevated_button.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/text.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/textfield.dart';
 
 class SignupPassword extends StatefulWidget {
-  const SignupPassword({super.key});
+  final String email;
+  const SignupPassword({super.key, required this.email});
 
   @override
   State<SignupPassword> createState() => _SignupPasswordState();
@@ -13,6 +15,11 @@ class SignupPassword extends StatefulWidget {
 
 class _SignupPasswordState extends State<SignupPassword> {
   final TextEditingController passwordController = TextEditingController();
+    @override
+  void dispose() {
+    super.dispose();
+    passwordController.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -51,7 +58,21 @@ class _SignupPasswordState extends State<SignupPassword> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 5),
-                child: MyElevatedButton(buttonText: "Next"),
+                child: MyElevatedButton(
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder:
+                            (context) => SignupUsername(
+                              email: widget.email,
+                              password: passwordController.text.trim(),
+                            ),
+                      ),
+                    );
+                  },
+                  buttonText: "Next",
+                ),
               ),
             ],
           ),

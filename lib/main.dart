@@ -3,9 +3,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:instagram_clone_flutter_firebase/firebase_options.dart';
 import 'package:instagram_clone_flutter_firebase/screens/signup1_email.dart';
-import 'package:instagram_clone_flutter_firebase/screens/signup1_phone.dart';
-import 'package:instagram_clone_flutter_firebase/screens/signup2_password.dart';
-import 'package:instagram_clone_flutter_firebase/screens/signup4_username.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
 
 void main() async {
@@ -25,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: mobileBackgroundColor,
       ),
-      home: SignupPhoneNo()
+      home: SignupEmail(),
       // home: const ResponsiveLayout(
       //   webScreenLayout: WebScreenLayout(),
       //   mobileScreenLayout: MobileScreenLayout(),

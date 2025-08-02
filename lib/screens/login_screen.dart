@@ -53,13 +53,17 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 5, bottom: 5),
-                child: MyElevatedButton(buttonText: "Log in"),
+                child: MyElevatedButton(buttonText: "Log in",onPressed: () {
+                  
+                },),
               ),
               MyTextButton(buttonText: "Forgotten password?"),
               Flexible(flex: 1, child: Container()),
               Padding(
                 padding: const EdgeInsets.only(top: 5),
-                child: MyElevatedButton(
+                child: MyElevatedButton(onPressed: () {
+                  
+                },
                   buttonText: "Create new account",
                   bgClr: mobileBackgroundColor,
                   borderClr: blueColor,

@@ -38,14 +38,32 @@ class _SignupPictureState extends State<SignupPicture> {
                   textSize: 16,
                 ),
               ),
+              const SizedBox(height: 70),
+              Stack(
+                children: [
+                  Center(
+                    child: const CircleAvatar(
+                      radius: 64,
+                      backgroundImage: NetworkImage(
+                        "https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?_gl=1*1omheia*_ga*MTkyNjUyOTQzMC4xNzU0MTQ4NTg0*_ga_8JE65Q40S6*czE3NTQxNDg1ODMkbzEkZzAkdDE3NTQxNDg1ODMkajYwJGwwJGgw",
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+              Flexible(flex: 1, child: Container()),
               Padding(
                 padding: const EdgeInsets.only(top: 10, bottom: 10),
-                child: MyElevatedButton(buttonText: "Add picture"),
+                child: MyElevatedButton(onPressed: () {
+                  
+                },buttonText: "Add picture"),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 5),
                 child: MyElevatedButton(
-                  buttonText: "Skip",
+                  onPressed: () {
+                  
+                },buttonText: "Skip",
                   bgClr: mobileBackgroundColor,
                   borderClr: secondaryColor,
                 ),

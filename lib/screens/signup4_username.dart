@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone_flutter_firebase/methods/auth_methods.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/elevated_button.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/text.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/textfield.dart';
 
 class SignupUsername extends StatefulWidget {
-  const SignupUsername({super.key});
+  final String email;
+  final String password;
+  const SignupUsername({
+    super.key,
+    required this.email,
+    required this.password,
+  });
 
   @override
   State<SignupUsername> createState() => _SignupUsernameState();
@@ -13,6 +20,12 @@ class SignupUsername extends StatefulWidget {
 
 class _SignupUsernameState extends State<SignupUsername> {
   final TextEditingController usernameContoller = TextEditingController();
+  @override
+  void dispose() {
+    super.dispose();
+    usernameContoller.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -44,12 +57,22 @@ class _SignupUsernameState extends State<SignupUsername> {
                 child: TextFieldInput(
                   labelText: "Username",
                   textEditingController: usernameContoller,
-                  textInputType: TextInputType.phone,
+                  textInputType: TextInputType.text,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 5),
-                child: MyElevatedButton(buttonText: "Next"),
+                child: MyElevatedButton(
+                  onPressed: () {
+                    AuthMethods().signupWithEmailAndPassword(
+                      email: widget.email,
+                      password: widget.password,
+                      username: usernameContoller.text.trim(),
+                      bio: "Flutter Dev",
+                    );
+                  },
+                  buttonText: "Next",
+                ),
               ),
             ],
           ),

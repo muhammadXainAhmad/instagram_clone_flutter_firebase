@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone_flutter_firebase/screens/signup2_password.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/elevated_button.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/text.dart';
@@ -13,6 +14,11 @@ class SignupEmail extends StatefulWidget {
 
 class _SignupEmailState extends State<SignupEmail> {
   final TextEditingController emailController = TextEditingController();
+  @override
+  void dispose() {
+    super.dispose();
+    emailController.dispose();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,16 +51,30 @@ class _SignupEmailState extends State<SignupEmail> {
                 child: TextFieldInput(
                   labelText: "Email address",
                   textEditingController: emailController,
-                  textInputType: TextInputType.phone,
+                  textInputType: TextInputType.emailAddress,
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 10, bottom: 10),
-                child: MyElevatedButton(buttonText: "Next"),
+                child: MyElevatedButton(
+                  buttonText: "Next",
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder:
+                            (context) => SignupPassword(
+                              email: emailController.text.trim(),
+                            ),
+                      ),
+                    );
+                  },
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 5),
                 child: MyElevatedButton(
+                  onPressed: () {},
                   buttonText: "Sign up with Mobile Number",
                   bgClr: mobileBackgroundColor,
                   borderClr: secondaryColor,

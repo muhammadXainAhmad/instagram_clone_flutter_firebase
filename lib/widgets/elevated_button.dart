@@ -6,9 +6,11 @@ class MyElevatedButton extends StatelessWidget {
   final Color bgClr;
   final Color borderClr;
   final Color textClr;
+  final VoidCallback onPressed;
   const MyElevatedButton({
     super.key,
     required this.buttonText,
+    required this.onPressed,
     this.bgClr = blueColor,
     this.borderClr = mobileBackgroundColor,
     this.textClr=primaryColor
@@ -17,7 +19,7 @@ class MyElevatedButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed: () {},
+      onPressed:onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: bgClr,
         minimumSize: Size(double.infinity, 50),
