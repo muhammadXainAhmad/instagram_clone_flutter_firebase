@@ -10,7 +10,7 @@ class MyTextButton extends StatelessWidget {
     return TextButton(
       onPressed: () {},
       style: TextButton.styleFrom(),
-      child: Text(buttonText, style: TextStyle(color: primaryColor)),
+      child: Text(buttonText, style: TextStyle(color: primaryColor,fontSize: 16)),
     );
   }
 }

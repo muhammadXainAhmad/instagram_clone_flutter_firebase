@@ -23,7 +23,7 @@ class MyElevatedButton extends StatelessWidget {
         minimumSize: Size(double.infinity, 50),
         side: BorderSide(color: borderClr,width: 2),
       ),
-      child: Text(buttonText, style: TextStyle(color: textClr)),
+      child: Text(buttonText, style: TextStyle(color: textClr,fontSize: 16)),
     );
   }
 }

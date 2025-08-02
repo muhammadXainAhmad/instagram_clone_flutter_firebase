@@ -38,7 +38,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Padding(
                 padding: const EdgeInsets.only(bottom: 5),
                 child: TextFieldInput(
-                  hintText: "Username, email address or mobile number",
+                  labelText: "Username, email address or mobile number",
                   textEditingController: emailController,
                   textInputType: TextInputType.emailAddress,
                 ),
@@ -46,7 +46,7 @@ class _LoginScreenState extends State<LoginScreen> {
               Padding(
                 padding: const EdgeInsets.only(top: 5, bottom: 5),
                 child: TextFieldInput(
-                  hintText: "Password",
+                  labelText: "Password",
                   textEditingController: passwordController,
                   textInputType: TextInputType.text,
                 ),

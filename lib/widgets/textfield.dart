@@ -4,11 +4,11 @@ import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
 class TextFieldInput extends StatelessWidget {
   final TextEditingController textEditingController;
   final bool isPass;
-  final String hintText;
+  final String labelText;
   final TextInputType textInputType;
   const TextFieldInput({
     super.key,
-    required this.hintText,
+    required this.labelText,
     this.isPass = false,
     required this.textEditingController,
     required this.textInputType,
@@ -27,8 +27,8 @@ class TextFieldInput extends StatelessWidget {
     return TextField(
       controller: textEditingController,
       decoration: InputDecoration(
-        hintText: hintText,
-        hintStyle: TextStyle(color: primaryColor),
+        labelText: labelText,
+        labelStyle: TextStyle(color: primaryColor,fontSize:16,),
         enabledBorder: eBorder,
         focusedBorder: fBorder,
         filled: true,
