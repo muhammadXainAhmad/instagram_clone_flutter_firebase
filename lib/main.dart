@@ -1,13 +1,13 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:instagram_clone_flutter_firebase/firebase_options.dart';
-import 'package:instagram_clone_flutter_firebase/responsive/layout_screen.dart';
-import 'package:instagram_clone_flutter_firebase/responsive/mobile_screen_layout.dart';
-import 'package:instagram_clone_flutter_firebase/responsive/web_screen_layout.dart';
+import 'package:instagram_clone_flutter_firebase/screens/login_screen.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await dotenv.load(fileName: "assets/.env");
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   runApp(const MyApp());
 }
@@ -22,10 +22,11 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: mobileBackgroundColor,
       ),
-      home: const ResponsiveLayout(
-        webScreenLayout: WebScreenLayout(),
-        mobileScreenLayout: MobileScreenLayout(),
-      ),
+      home: LoginScreen(),
+      // home: const ResponsiveLayout(
+      //   webScreenLayout: WebScreenLayout(),
+      //   mobileScreenLayout: MobileScreenLayout(),
+      // ),
     );
   }
 }
