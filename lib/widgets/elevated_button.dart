@@ -6,6 +6,7 @@ class MyElevatedButton extends StatelessWidget {
   final Color bgClr;
   final Color borderClr;
   final Color textClr;
+  final bool isLoading;
   final VoidCallback onPressed;
   const MyElevatedButton({
     super.key,
@@ -13,19 +14,31 @@ class MyElevatedButton extends StatelessWidget {
     required this.onPressed,
     this.bgClr = blueColor,
     this.borderClr = mobileBackgroundColor,
-    this.textClr=primaryColor
+    this.textClr = primaryColor,
+    this.isLoading = false,
   });
 
   @override
   Widget build(BuildContext context) {
     return ElevatedButton(
-      onPressed:onPressed,
+      onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: bgClr,
         minimumSize: Size(double.infinity, 50),
-        side: BorderSide(color: borderClr,width: 2),
+        side: BorderSide(color: borderClr, width: 2),
       ),
-      child: Text(buttonText, style: TextStyle(color: textClr,fontSize: 16)),
+      child:
+          isLoading
+              ? Center(
+                child: CircularProgressIndicator(
+                  color: primaryColor,
+                  strokeWidth: 2,
+                ),
+              )
+              : Text(
+                buttonText,
+                style: TextStyle(color: textClr, fontSize: 16),
+              ),
     );
   }
 }

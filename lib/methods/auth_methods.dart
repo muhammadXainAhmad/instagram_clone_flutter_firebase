@@ -16,7 +16,7 @@ class AuthMethods {
     required String bio,
     required Uint8List file,
   }) async {
-    String res = "Error Occured!";
+    String message = "";
     try {
       if (email.isNotEmpty && password.isNotEmpty && username.isNotEmpty) {
         // CREATING USER
@@ -41,11 +41,15 @@ class AuthMethods {
           "followers": [],
           "following": [],
         });
-        res = "User Created Successfully!";
+        message = "User Created Successfully!";
       }
-    } catch (e) {
-      res = e.toString();
-    }
-    return res;
+    } on FirebaseAuthException catch (err) {
+      switch (err.code){
+        case "invalid-email": message="The email format is invalid."; break;
+        case "weak-password": message="Password is too weak."; break;
+        default: message="An error occured. Please try again.";
+      }
+    } 
+    return message;
   }
 }

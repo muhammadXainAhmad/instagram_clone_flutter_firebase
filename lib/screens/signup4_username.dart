@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone_flutter_firebase/methods/auth_methods.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
+import 'package:instagram_clone_flutter_firebase/utils/utils.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/elevated_button.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/text.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/textfield.dart';
@@ -25,6 +26,7 @@ class SignupUsername extends StatefulWidget {
 class _SignupUsernameState extends State<SignupUsername> {
   final TextEditingController usernameContoller = TextEditingController();
   final TextEditingController bioController = TextEditingController();
+  bool _isLoading = false;
 
   @override
   void dispose() {
@@ -79,16 +81,29 @@ class _SignupUsernameState extends State<SignupUsername> {
               Padding(
                 padding: const EdgeInsets.only(top: 5),
                 child: MyElevatedButton(
-                  onPressed: () {
-                    AuthMethods().signupWithEmailAndPassword(
-                      email: widget.email,
-                      password: widget.password,
-                      file: widget.file,
-                      username: usernameContoller.text.trim(),
-                      bio: bioController.text.trim(),
-                    );
+                  onPressed: () async {
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    String message = await AuthMethods()
+                        .signupWithEmailAndPassword(
+                          email: widget.email,
+                          password: widget.password,
+                          file: widget.file,
+                          username: usernameContoller.text.trim(),
+                          bio: bioController.text.trim(),
+                        );
+                    setState(() {
+                      _isLoading = false;
+                    });
+                    if (message != "User Created Successfully!") {
+                      if (mounted) {
+                        showSnackBar(context, message);
+                      }
+                    }
                   },
-                  buttonText: "Next",
+                  buttonText: "Sign Up",
+                  isLoading: _isLoading,
                 ),
               ),
             ],

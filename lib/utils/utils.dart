@@ -1,4 +1,6 @@
+import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
 
 pickImage(ImageSource source) async {
   final ImagePicker imagePicker = ImagePicker();
@@ -6,4 +8,20 @@ pickImage(ImageSource source) async {
   if (file != null) {
     return await file.readAsBytes();
   }
+}
+
+void showSnackBar(BuildContext context, String content) {
+  ScaffoldMessenger.of(context).showSnackBar(
+    SnackBar(
+      content: Center(
+        child: Text(
+          content,
+          style: TextStyle(color: primaryColor, fontSize: 14),
+        ),
+      ),
+      backgroundColor: errorColor,
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+    ),
+  );
 }
