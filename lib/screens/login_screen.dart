@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:instagram_clone_flutter_firebase/methods/auth_methods.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
+import 'package:instagram_clone_flutter_firebase/utils/utils.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/elevated_button.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/text_button.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/textfield.dart';
@@ -15,6 +17,7 @@ class LoginScreen extends StatefulWidget {
 class _LoginScreenState extends State<LoginScreen> {
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
+  bool _isLoading = false;
   @override
   void dispose() {
     super.dispose();
@@ -32,7 +35,6 @@ class _LoginScreenState extends State<LoginScreen> {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Flexible(flex: 1, child: Container()),
-
               SvgPicture.asset("assets/instagramIcon.svg", height: 64),
               const SizedBox(height: 120),
               Padding(
@@ -53,17 +55,35 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 5, bottom: 5),
-                child: MyElevatedButton(buttonText: "Log in",onPressed: () {
-                  
-                },),
+                child: MyElevatedButton(
+                  buttonText: "Log in",
+                  isLoading: _isLoading,
+                  onPressed: () async {
+                    setState(() {
+                      _isLoading = true;
+                    });
+                    String message = await AuthMethods()
+                        .loginWithEmailAndPassword(
+                          email: emailController.text.trim(),
+                          password: passwordController.text.trim(),
+                        );
+                    setState(() {
+                      _isLoading = false;
+                    });
+                    if (message != "User Logged In Successfully!") {
+                      if (mounted) {
+                        showSnackBar(context, message);
+                      }
+                    }
+                  },
+                ),
               ),
               MyTextButton(buttonText: "Forgotten password?"),
               Flexible(flex: 1, child: Container()),
               Padding(
                 padding: const EdgeInsets.only(top: 5),
-                child: MyElevatedButton(onPressed: () {
-                  
-                },
+                child: MyElevatedButton(
+                  onPressed: () {},
                   buttonText: "Create new account",
                   bgClr: mobileBackgroundColor,
                   borderClr: blueColor,

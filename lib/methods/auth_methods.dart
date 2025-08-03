@@ -1,5 +1,4 @@
 import 'dart:typed_data';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:instagram_clone_flutter_firebase/methods/storage_methods.dart';
@@ -7,6 +6,40 @@ import 'package:instagram_clone_flutter_firebase/methods/storage_methods.dart';
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  //LOG IN USING EMAIL AND PASSWORD
+  Future<String> loginWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    String message = "";
+    try {
+      if (email.isNotEmpty && password.isNotEmpty) {
+        await _auth.signInWithEmailAndPassword(
+          email: email,
+          password: password,
+        );
+        message = "User Logged In Successfully!";
+      } else {
+        message = "Please enter all the fields.";
+      }
+    } on FirebaseAuthException catch (err) {
+      switch (err.code) {
+        case "invalid-email":
+          message = "The email format is invalid.";
+          break;
+        case 'user-not-found':
+          message = 'No user found for this email.';
+          break;
+        case 'invalid-credential':
+          message = 'Incorrect password.';
+          break;
+        default:
+          message = "An error occured. Please try again.";
+      }
+    }
+    return message;
+  }
 
   //SIGN UP USING EMAIL AND PASSWORD
   Future<String> signupWithEmailAndPassword({
@@ -44,12 +77,17 @@ class AuthMethods {
         message = "User Created Successfully!";
       }
     } on FirebaseAuthException catch (err) {
-      switch (err.code){
-        case "invalid-email": message="The email format is invalid."; break;
-        case "weak-password": message="Password is too weak."; break;
-        default: message="An error occured. Please try again.";
+      switch (err.code) {
+        case "invalid-email":
+          message = "The email format is invalid.";
+          break;
+        case "weak-password":
+          message = "Password is too weak.";
+          break;
+        default:
+          message = "An error occured. Please try again.";
       }
-    } 
+    }
     return message;
   }
 }
