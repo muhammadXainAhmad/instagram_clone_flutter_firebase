@@ -22,7 +22,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData.dark().copyWith(
         scaffoldBackgroundColor: mobileBackgroundColor,
       ),
-      home: SignupEmail(),
+      home: SignupEmail()
       // home: const ResponsiveLayout(
       //   webScreenLayout: WebScreenLayout(),
       //   mobileScreenLayout: MobileScreenLayout(),

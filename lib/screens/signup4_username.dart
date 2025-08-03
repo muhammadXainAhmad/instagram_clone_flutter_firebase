@@ -1,3 +1,5 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:instagram_clone_flutter_firebase/methods/auth_methods.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
@@ -8,10 +10,12 @@ import 'package:instagram_clone_flutter_firebase/widgets/textfield.dart';
 class SignupUsername extends StatefulWidget {
   final String email;
   final String password;
+  final Uint8List file;
   const SignupUsername({
     super.key,
     required this.email,
     required this.password,
+    required this.file,
   });
 
   @override
@@ -20,10 +24,13 @@ class SignupUsername extends StatefulWidget {
 
 class _SignupUsernameState extends State<SignupUsername> {
   final TextEditingController usernameContoller = TextEditingController();
+  final TextEditingController bioController = TextEditingController();
+
   @override
   void dispose() {
     super.dispose();
     usernameContoller.dispose();
+    bioController.dispose();
   }
 
   @override
@@ -40,23 +47,32 @@ class _SignupUsernameState extends State<SignupUsername> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               MyText(
-                text: "Review your username",
+                text: "Review your username and bio",
                 textClr: primaryColor,
                 textSize: 24,
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 5, bottom: 5),
                 child: MyText(
-                  text: "Add a username. You can change this at any time.",
+                  text:
+                      "Add a username and bio. Your bio is visible to everyone on and off Instagram. You can change these at any time.",
                   textClr: primaryColor,
                   textSize: 16,
                 ),
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 10, bottom: 10),
+                padding: const EdgeInsets.only(top: 10, bottom: 5),
                 child: TextFieldInput(
                   labelText: "Username",
                   textEditingController: usernameContoller,
+                  textInputType: TextInputType.text,
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5, bottom: 10),
+                child: TextFieldInput(
+                  labelText: "Bio",
+                  textEditingController: bioController,
                   textInputType: TextInputType.text,
                 ),
               ),
@@ -67,8 +83,9 @@ class _SignupUsernameState extends State<SignupUsername> {
                     AuthMethods().signupWithEmailAndPassword(
                       email: widget.email,
                       password: widget.password,
+                      file: widget.file,
                       username: usernameContoller.text.trim(),
-                      bio: "Flutter Dev",
+                      bio: bioController.text.trim(),
                     );
                   },
                   buttonText: "Next",

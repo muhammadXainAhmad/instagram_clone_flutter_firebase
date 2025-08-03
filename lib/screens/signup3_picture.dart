@@ -1,16 +1,30 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:instagram_clone_flutter_firebase/screens/signup4_username.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
+import 'package:instagram_clone_flutter_firebase/utils/utils.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/elevated_button.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/text.dart';
 
 class SignupPicture extends StatefulWidget {
-  const SignupPicture({super.key});
+  final String email;
+  final String password;
+  const SignupPicture({super.key, required this.email, required this.password});
 
   @override
   State<SignupPicture> createState() => _SignupPictureState();
 }
 
 class _SignupPictureState extends State<SignupPicture> {
+  Uint8List? image;
+  void selectImage() async {
+    Uint8List im = await pickImage(ImageSource.gallery);
+    setState(() {
+      image = im;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -39,31 +53,44 @@ class _SignupPictureState extends State<SignupPicture> {
                 ),
               ),
               const SizedBox(height: 70),
-              Stack(
-                children: [
-                  Center(
-                    child: const CircleAvatar(
-                      radius: 64,
-                      backgroundImage: NetworkImage(
-                        "https://images.pexels.com/photos/771742/pexels-photo-771742.jpeg?_gl=1*1omheia*_ga*MTkyNjUyOTQzMC4xNzU0MTQ4NTg0*_ga_8JE65Q40S6*czE3NTQxNDg1ODMkbzEkZzAkdDE3NTQxNDg1ODMkajYwJGwwJGgw",
-                      ),
-                    ),
-                  ),
-                ],
+              Center(
+                child: CircleAvatar(
+                  radius: 64,
+                  backgroundImage:
+                      image != null
+                          ? MemoryImage(image!)
+                          : NetworkImage(
+                            "https://i.pinimg.com/236x/74/67/ac/7467acd73768ec753f20c4ac6cf39441.jpg",
+                          ),
+                ),
               ),
               Flexible(flex: 1, child: Container()),
               Padding(
                 padding: const EdgeInsets.only(top: 10, bottom: 10),
-                child: MyElevatedButton(onPressed: () {
-                  
-                },buttonText: "Add picture"),
+                child: MyElevatedButton(
+                  onPressed: () {
+                    selectImage();
+                  },
+                  buttonText: "Add picture",
+                ),
               ),
               Padding(
                 padding: const EdgeInsets.only(top: 5),
                 child: MyElevatedButton(
                   onPressed: () {
-                  
-                },buttonText: "Skip",
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder:
+                            (context) => SignupUsername(
+                              email: widget.email,
+                              password: widget.password,
+                              file: image!,
+                            ),
+                      ),
+                    );
+                  },
+                  buttonText: "Next",
                   bgClr: mobileBackgroundColor,
                   borderClr: secondaryColor,
                 ),

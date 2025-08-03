@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:instagram_clone_flutter_firebase/screens/signup4_username.dart';
+import 'package:instagram_clone_flutter_firebase/screens/signup3_picture.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/elevated_button.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/text.dart';
@@ -15,11 +15,12 @@ class SignupPassword extends StatefulWidget {
 
 class _SignupPasswordState extends State<SignupPassword> {
   final TextEditingController passwordController = TextEditingController();
-    @override
+  @override
   void dispose() {
     super.dispose();
     passwordController.dispose();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -64,7 +65,7 @@ class _SignupPasswordState extends State<SignupPassword> {
                       context,
                       MaterialPageRoute(
                         builder:
-                            (context) => SignupUsername(
+                            (context) => SignupPicture(
                               email: widget.email,
                               password: passwordController.text.trim(),
                             ),
