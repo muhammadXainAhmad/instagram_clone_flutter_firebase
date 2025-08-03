@@ -37,6 +37,7 @@ dependencies:
     sdk: flutter
   flutter_dotenv: ^5.2.1
   flutter_svg: ^2.2.0
+  image_picker: ^1.1.2
 
 dev_dependencies:
   flutter_lints: ^5.0.0
@@ -57,7 +58,6 @@ flutter:
     - assets/.env
     - assets/instagramLogo.svg
     - assets/instagramIcon.svg
-
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
   # For details regarding adding assets from package dependencies, see
