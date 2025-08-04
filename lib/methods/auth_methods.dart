@@ -2,10 +2,18 @@ import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:instagram_clone_flutter_firebase/methods/storage_methods.dart';
+import 'package:instagram_clone_flutter_firebase/models/users.dart';
 
 class AuthMethods {
   final FirebaseAuth _auth = FirebaseAuth.instance;
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+
+  Future<UserModel> getUserDetails() async {
+    User currentUser = _auth.currentUser!;
+    DocumentSnapshot snap =
+        await _firestore.collection("users").doc(currentUser.uid).get();
+    return UserModel.fromSnap(snap);
+  }
 
   //LOG IN USING EMAIL AND PASSWORD
   Future<String> loginWithEmailAndPassword({
@@ -64,16 +72,21 @@ class AuthMethods {
           false,
         );
 
+        UserModel user = UserModel(
+          uid: userCred.user!.uid,
+          username: username,
+          email: email,
+          bio: bio,
+          photoUrl: photoURL,
+          followers: [],
+          following: [],
+        );
+
         // ADDING USER DATA TO FIRESTORE
-        _firestore.collection("users").doc(userCred.user!.uid).set({
-          "uid": userCred.user!.uid,
-          "username": username,
-          "email": email,
-          "bio": bio,
-          "photoURL": photoURL,
-          "followers": [],
-          "following": [],
-        });
+        _firestore
+            .collection("users")
+            .doc(userCred.user!.uid)
+            .set(user.toMap());
         message = "User Created Successfully!";
       }
     } on FirebaseAuthException catch (err) {
