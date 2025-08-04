@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:instagram_clone_flutter_firebase/models/users.dart';
-import 'package:instagram_clone_flutter_firebase/providers/user_provider.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
-import 'package:provider/provider.dart';
 
 class MobileScreenLayout extends StatefulWidget {
   const MobileScreenLayout({super.key});
@@ -12,15 +9,60 @@ class MobileScreenLayout extends StatefulWidget {
 }
 
 class _MobileScreenLayoutState extends State<MobileScreenLayout> {
+  int _page = 0;
+  late PageController pageController;
+
+  void navigationTapped(int page) {
+    pageController.jumpToPage(page);
+  }
+
+  void onPageChanged(int page) {
+    setState(() {
+      _page = page;
+    });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    pageController = PageController();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    pageController.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    UserModel user = Provider.of<UserProvider>(context).getUser;
     return Scaffold(
-      body: Center(
-        child: Text(
-          user.email,
-          style: TextStyle(color: primaryColor, fontSize: 24),
-        ),
+      bottomNavigationBar: BottomNavigationBar(
+        type: BottomNavigationBarType.fixed,
+        backgroundColor: mobileBackgroundColor,
+        selectedItemColor: primaryColor,
+        unselectedItemColor: secondaryColor,
+        items: [
+          BottomNavigationBarItem(icon: Icon(Icons.home), label: ""),
+          BottomNavigationBarItem(icon: Icon(Icons.search), label: ""),
+          BottomNavigationBarItem(icon: Icon(Icons.add_circle), label: ""),
+          BottomNavigationBarItem(icon: Icon(Icons.favorite), label: ""),
+          BottomNavigationBarItem(icon: Icon(Icons.person), label: ""),
+        ],
+        currentIndex: _page,
+        onTap: navigationTapped,
+      ),
+      body: PageView(
+        controller: pageController,
+        onPageChanged: onPageChanged,
+        physics: NeverScrollableScrollPhysics(),
+        children: [
+          Text("1", style: TextStyle(fontSize: 36)),
+          Text("2", style: TextStyle(fontSize: 36)),
+          Text("3", style: TextStyle(fontSize: 36)),
+          Text("4", style: TextStyle(fontSize: 36)),
+          Text("5", style: TextStyle(fontSize: 36)),
+        ],
       ),
     );
   }
