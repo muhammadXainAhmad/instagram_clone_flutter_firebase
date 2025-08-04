@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram_clone_flutter_firebase/methods/auth_methods.dart';
-import 'package:instagram_clone_flutter_firebase/responsive/layout_screen.dart';
+import 'package:instagram_clone_flutter_firebase/responsive/responsive_layout_screen.dart';
 import 'package:instagram_clone_flutter_firebase/responsive/mobile_screen_layout.dart';
 import 'package:instagram_clone_flutter_firebase/responsive/web_screen_layout.dart';
 import 'package:instagram_clone_flutter_firebase/screens/signup1_email.dart';
