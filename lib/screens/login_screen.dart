@@ -1,6 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram_clone_flutter_firebase/methods/auth_methods.dart';
+import 'package:instagram_clone_flutter_firebase/responsive/layout_screen.dart';
+import 'package:instagram_clone_flutter_firebase/responsive/mobile_screen_layout.dart';
+import 'package:instagram_clone_flutter_firebase/responsive/web_screen_layout.dart';
+import 'package:instagram_clone_flutter_firebase/screens/signup1_email.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
 import 'package:instagram_clone_flutter_firebase/utils/utils.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/elevated_button.dart';
@@ -70,7 +74,18 @@ class _LoginScreenState extends State<LoginScreen> {
                     setState(() {
                       _isLoading = false;
                     });
-                    if (message != "User Logged In Successfully!") {
+                    if (message == "User Logged In Successfully!") {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => const ResponsiveLayout(
+                                webScreenLayout: WebScreenLayout(),
+                                mobileScreenLayout: MobileScreenLayout(),
+                              ),
+                        ),
+                      );
+                    } else {
                       if (mounted) {
                         showSnackBar(context, message);
                       }
@@ -83,7 +98,14 @@ class _LoginScreenState extends State<LoginScreen> {
               Padding(
                 padding: const EdgeInsets.only(top: 5),
                 child: MyElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const SignupEmail(),
+                      ),
+                    );
+                  },
                   buttonText: "Create new account",
                   bgClr: mobileBackgroundColor,
                   borderClr: blueColor,

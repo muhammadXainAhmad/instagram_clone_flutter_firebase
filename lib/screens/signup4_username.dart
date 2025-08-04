@@ -2,6 +2,9 @@ import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
 import 'package:instagram_clone_flutter_firebase/methods/auth_methods.dart';
+import 'package:instagram_clone_flutter_firebase/responsive/layout_screen.dart';
+import 'package:instagram_clone_flutter_firebase/responsive/mobile_screen_layout.dart';
+import 'package:instagram_clone_flutter_firebase/responsive/web_screen_layout.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
 import 'package:instagram_clone_flutter_firebase/utils/utils.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/elevated_button.dart';
@@ -100,6 +103,17 @@ class _SignupUsernameState extends State<SignupUsername> {
                       if (mounted) {
                         showSnackBar(context, message);
                       }
+                    } else {
+                      Navigator.pushReplacement(
+                        context,
+                        MaterialPageRoute(
+                          builder:
+                              (context) => const ResponsiveLayout(
+                                webScreenLayout: WebScreenLayout(),
+                                mobileScreenLayout: MobileScreenLayout(),
+                              ),
+                        ),
+                      );
                     }
                   },
                   buttonText: "Sign Up",
