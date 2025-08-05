@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:instagram_clone_flutter_firebase/methods/firestore_methods.dart';
 import 'package:instagram_clone_flutter_firebase/models/users.dart';
 import 'package:instagram_clone_flutter_firebase/providers/user_provider.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
@@ -54,6 +55,29 @@ class _AddPostScreenState extends State<AddPostScreen> {
     );
   }
 
+  postImage(String uid, String username, String profileUrl) async {
+    try {
+      String message = await FirestoreMethods().uploadPost(
+        captionController.text.trim(),
+        _file!,
+        uid,
+        username,
+        profileUrl,
+      );
+      if (message == "Post Successfully Added!") {
+        showSnackBar(
+          context: context,
+          content: "Post Successfully Added!",
+          clr: successColor,
+        );
+      } else {
+        showSnackBar(context: context, content: message, clr: errorColor);
+      }
+    } catch (err) {
+      showSnackBar(context: context, content: err.toString(), clr: errorColor);
+    }
+  }
+
   @override
   void dispose() {
     super.dispose();
@@ -62,78 +86,91 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final UserModel user = Provider.of<UserProvider>(context).getUser;
-    return Scaffold(
-      appBar: AppBar(
-        backgroundColor: mobileBackgroundColor,
-        leading: Icon(Icons.arrow_back, color: primaryColor),
-        title: MyText(text: "New post", textClr: primaryColor, textSize: 22),
-        actions: [
-          _file == null
-              ? SizedBox.shrink()
-              : MyTextButton(buttonText: "Post", txtClr: blueColor),
-        ],
-      ),
-      body:
-          _file == null
-              ? Center(
-                child: IconButton(
-                  style: IconButton.styleFrom(
-                    shape: RoundedRectangleBorder(
-                      borderRadius: BorderRadius.circular(10),
-                      side: BorderSide(color: blueColor),
+    UserModel user = Provider.of<UserProvider>(context, listen: false).getUser;
+    return GestureDetector(
+      onTap: () {
+        FocusScope.of(context).unfocus();
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          backgroundColor: mobileBackgroundColor,
+          leading: Icon(Icons.arrow_back, color: primaryColor),
+          title: MyText(text: "New post", textClr: primaryColor, textSize: 22),
+          actions: [
+            _file == null
+                ? SizedBox.shrink()
+                : MyTextButton(
+                  buttonText: "Post",
+                  txtClr: blueColor,
+                  onPressed: () {
+                    postImage(user.uid, user.username, user.photoUrl);
+                  },
+                ),
+          ],
+        ),
+        body:
+            _file == null
+                ? Center(
+                  child: IconButton(
+                    style: IconButton.styleFrom(
+                      shape: RoundedRectangleBorder(
+                        borderRadius: BorderRadius.circular(10),
+                        side: BorderSide(color: blueColor),
+                      ),
                     ),
+                    color: primaryColor,
+                    iconSize: 28,
+                    tooltip: "Upload an image",
+                    onPressed: () => _selectImage(),
+                    icon: Icon(Icons.upload, color: primaryColor),
                   ),
-                  color: primaryColor,
-                  iconSize: 28,
-                  tooltip: "Upload an image",
-                  onPressed: () => _selectImage(),
-                  icon: Icon(Icons.upload, color: primaryColor),
-                ),
-              )
-              : Center(
-                child: Column(
-                  children: [
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceAround,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        CircleAvatar(
-                          backgroundImage: NetworkImage(user.photoUrl),
-                        ),
-                        SizedBox(
-                          width: MediaQuery.of(context).size.width * 0.7,
-                          child: TextField(
-                            controller: captionController,
-                            maxLines: 4,
-                            decoration: InputDecoration(
-                              border: InputBorder.none,
-                              hintText: "Write a caption ...",
-                              labelStyle: TextStyle(
-                                color: primaryColor,
-                                fontSize: 16,
+                )
+                : Center(
+                  child: Column(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.only(top: 20, bottom: 10),
+                        child: InkWell(
+                          onTap: () => _selectImage(),
+                          child: Container(
+                            height: 250,
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            decoration: BoxDecoration(
+                              borderRadius: BorderRadius.circular(10),
+                              image: DecorationImage(
+                                image: MemoryImage(_file!),
+                                fit: BoxFit.scaleDown,
+                                alignment: Alignment.center,
                               ),
-                              filled: true,
-                              fillColor: mobileBackgroundColor,
                             ),
                           ),
                         ),
-                        Container(
-                          height: 45,
-                          width: 45,
-                          decoration: BoxDecoration(
-                            image: DecorationImage(
-                              image: MemoryImage(_file!),
-                              fit: BoxFit.cover,
-                              alignment: Alignment.center,
+                      ),
+                      SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.8,
+                        child: TextField(
+                          controller: captionController,
+                          maxLines: 4,
+                          decoration: InputDecoration(
+                            border: InputBorder.none,
+                            hintText: "Add a caption ...",
+                            labelStyle: TextStyle(
+                              color: primaryColor,
+                              fontSize: 16,
                             ),
+                            suffix: InkWell(
+                              child: Icon(Icons.close, color: primaryColor),
+                              onTap: () => captionController.clear(),
+                            ),
+                            filled: true,
+                            fillColor: mobileBackgroundColor,
                           ),
                         ),
-                      ],
-                    ),
-                  ],
+                      ),
+                    ],
+                  ),
                 ),
-              ),
+      ),
     );
   }
 }
