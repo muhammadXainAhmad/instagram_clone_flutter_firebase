@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
+import 'package:instagram_clone_flutter_firebase/utils/global_variables.dart';
 
 class MobileScreenLayout extends StatefulWidget {
   const MobileScreenLayout({super.key});
@@ -56,13 +57,7 @@ class _MobileScreenLayoutState extends State<MobileScreenLayout> {
         controller: pageController,
         onPageChanged: onPageChanged,
         physics: NeverScrollableScrollPhysics(),
-        children: [
-          Text("1", style: TextStyle(fontSize: 36)),
-          Text("2", style: TextStyle(fontSize: 36)),
-          Text("3", style: TextStyle(fontSize: 36)),
-          Text("4", style: TextStyle(fontSize: 36)),
-          Text("5", style: TextStyle(fontSize: 36)),
-        ],
+        children: homeScreenItems,
       ),
     );
   }

@@ -66,7 +66,7 @@ class AuthMethods {
           password: password,
         );
 
-        String photoURL = await StorageMethods().uploadImageToStorage(
+        String photoUrl = await StorageMethods().uploadImageToStorage(
           "profilePics",
           file,
           false,
@@ -77,7 +77,7 @@ class AuthMethods {
           username: username,
           email: email,
           bio: bio,
-          photoUrl: photoURL,
+          photoUrl: photoUrl,
           followers: [],
           following: [],
         );
