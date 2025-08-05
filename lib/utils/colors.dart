@@ -7,3 +7,4 @@ const blueColor = Colors.blue;
 const primaryColor = Colors.white;
 const secondaryColor = Colors.grey;
 const errorColor = Colors.red;
+const successColor=Color.fromRGBO(118, 255, 3, 1);

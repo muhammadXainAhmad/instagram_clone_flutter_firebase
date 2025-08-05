@@ -101,7 +101,11 @@ class _SignupUsernameState extends State<SignupUsername> {
                     });
                     if (message != "User Created Successfully!") {
                       if (mounted) {
-                        showSnackBar(context, message);
+                        showSnackBar(
+                          context: context,
+                          content: message,
+                          clr: errorColor,
+                        );
                       }
                     } else {
                       Navigator.pushReplacement(

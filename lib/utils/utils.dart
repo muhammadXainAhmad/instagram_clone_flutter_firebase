@@ -10,7 +10,11 @@ pickImage(ImageSource source) async {
   }
 }
 
-void showSnackBar(BuildContext context, String content) {
+void showSnackBar({
+  required BuildContext context,
+  required String content,
+  Color clr = Colors.red,
+}) {
   ScaffoldMessenger.of(context).showSnackBar(
     SnackBar(
       content: Center(
@@ -19,7 +23,7 @@ void showSnackBar(BuildContext context, String content) {
           style: TextStyle(color: primaryColor, fontSize: 14),
         ),
       ),
-      backgroundColor: errorColor,
+      backgroundColor: clr,
       behavior: SnackBarBehavior.floating,
       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
     ),

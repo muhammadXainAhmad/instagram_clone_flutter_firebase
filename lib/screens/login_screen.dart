@@ -87,13 +87,13 @@ class _LoginScreenState extends State<LoginScreen> {
                       );
                     } else {
                       if (mounted) {
-                        showSnackBar(context, message);
+                        showSnackBar(context: context,content: message,clr: errorColor);
                       }
                     }
                   },
                 ),
               ),
-              MyTextButton(buttonText: "Forgotten password?"),
+              MyTextButton(buttonText: "Forgotten password?", onPressed: () {}),
               Flexible(flex: 1, child: Container()),
               Padding(
                 padding: const EdgeInsets.only(top: 5),
