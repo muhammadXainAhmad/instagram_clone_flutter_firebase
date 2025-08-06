@@ -11,7 +11,7 @@ class ProfileScreen extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Column(mainAxisAlignment: MainAxisAlignment.center,
-          children: [Text(Provider.of<UserProvider>(context).getUser.email),
+          children: [Text(Provider.of<UserProvider>(context).getUser!.email),
             ElevatedButton(
               onPressed: () async {
                 FirebaseAuth.instance.signOut();

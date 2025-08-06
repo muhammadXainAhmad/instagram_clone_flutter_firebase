@@ -1,3 +1,4 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone_flutter_firebase/models/users.dart';
 import 'package:instagram_clone_flutter_firebase/providers/user_provider.dart';
@@ -19,7 +20,7 @@ class _PostCardState extends State<PostCard> {
   bool isLikeAnimating = false;
   @override
   Widget build(BuildContext context) {
-    final UserModel user = Provider.of<UserProvider>(context).getUser;
+    final user = Provider.of<UserProvider>(context).getUser;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: Column(
@@ -92,7 +93,7 @@ class _PostCardState extends State<PostCard> {
                 child: Padding(
                   padding: const EdgeInsets.only(left: 10, right: 3),
                   child: LikeAnimation(
-                    isAnimating: widget.snap["likes"].contains(user.uid),
+                    isAnimating: widget.snap["likes"].contains(user!.uid),
                     smallLike: true,
                     child: Icon(Icons.favorite_border),
                   ),

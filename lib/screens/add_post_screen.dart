@@ -106,7 +106,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
 
   @override
   Widget build(BuildContext context) {
-    UserModel user = Provider.of<UserProvider>(context, listen: false).getUser;
+    UserModel? user = Provider.of<UserProvider>(context, listen: false).getUser;
     return GestureDetector(
       onTap: () {
         FocusScope.of(context).unfocus();
@@ -126,7 +126,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                   buttonText: "Post",
                   txtClr: blueColor,
                   onPressed: () {
-                    postImage(user.uid, user.username, user.photoUrl);
+                    postImage(user!.uid, user.username, user.photoUrl);
                   },
                 ),
           ],
