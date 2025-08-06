@@ -1,14 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/text.dart';
+import 'package:intl/intl.dart';
 
 class PostCard extends StatelessWidget {
-  const PostCard({super.key});
-
+  final snap;
+  const PostCard({super.key, required this.snap});
   @override
   Widget build(BuildContext context) {
-    return Container(
-      color: errorColor,
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 5),
       child: Column(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -18,17 +19,16 @@ class PostCard extends StatelessWidget {
                 padding: const EdgeInsets.only(left: 10),
                 child: CircleAvatar(
                   radius: 16,
-                  backgroundImage: NetworkImage(
-                    "https://i.pinimg.com/236x/74/67/ac/7467acd73768ec753f20c4ac6cf39441.jpg",
-                  ),
+                  backgroundImage: NetworkImage(snap["photoUrl"]),
                 ),
               ),
               Padding(
                 padding: const EdgeInsets.only(left: 12.0),
                 child: MyText(
-                  text: "Username",
+                  text: snap["username"],
                   textClr: primaryColor,
-                  textSize: 14,
+                  textSize: 16,
+                  textWeight: FontWeight.bold,
                 ),
               ),
               Spacer(),
@@ -37,39 +37,62 @@ class PostCard extends StatelessWidget {
           ),
           SizedBox(
             width: double.infinity,
-            height: MediaQuery.of(context).size.height * 0.3,
-            child: Image.network(
-              fit: BoxFit.cover,
-              "https://static.vecteezy.com/system/resources/thumbnails/065/785/991/small/majestic-mountain-range-reflecting-in-a-serene-river-at-sunset-in-a-tranquil-valley-photo.jpeg",
-            ),
+            height: MediaQuery.of(context).size.height * 0.45,
+            child: Image.network(fit: BoxFit.cover, snap["postUrl"]),
           ),
           Row(
             children: [
-              IconButton(onPressed: () {}, icon: Icon(Icons.favorite_border)),
-              MyText(text: "200", textClr: primaryColor, textSize: 12),
-              IconButton(onPressed: () {}, icon: Icon(Icons.messenger_outline)),
+              GestureDetector(
+                onTap: () {},
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 3),
+                  child: Icon(Icons.favorite_border),
+                ),
+              ),
+              MyText(
+                text: "${snap["likes"].length}",
+                textClr: primaryColor,
+                textSize: 12,
+              ),
+              GestureDetector(
+                onTap: () {},
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 3),
+                  child: Icon(Icons.messenger_outline),
+                ),
+              ),
               MyText(text: "18", textClr: primaryColor, textSize: 12),
-              IconButton(onPressed: () {}, icon: Icon(Icons.send)),
+              GestureDetector(
+                onTap: () {},
+                child: Padding(
+                  padding: const EdgeInsets.only(left: 10, right: 4),
+                  child: Icon(Icons.send),
+                ),
+              ),
               MyText(text: "32", textClr: primaryColor, textSize: 12),
               Spacer(),
               IconButton(onPressed: () {}, icon: Icon(Icons.bookmark_border)),
             ],
           ),
           Padding(
-            padding: const EdgeInsets.only(left: 10.0),
+            padding: const EdgeInsets.only(left: 10.0, bottom: 5),
             child: Row(
               children: [
                 RichText(
                   text: TextSpan(
                     children: [
                       TextSpan(
-                        text: "Username ",
+                        text: snap["username"],
                         style: TextStyle(
                           color: primaryColor,
                           fontWeight: FontWeight.bold,
+                          fontSize: 16,
                         ),
                       ),
-                      TextSpan(text: "Post caption"),
+                      TextSpan(
+                        text: "  ${snap["caption"]}",
+                        style: TextStyle(fontSize: 16),
+                      ),
                     ],
                   ),
                 ),
@@ -81,8 +104,8 @@ class PostCard extends StatelessWidget {
             child: Align(
               alignment: Alignment.centerLeft,
               child: MyText(
-                text: "August 06,2025",
-                textClr: primaryColor,
+                text: DateFormat.yMMMd().format(snap["postedDate"].toDate()),
+                textClr: secondaryColor,
                 textSize: 12,
               ),
             ),
