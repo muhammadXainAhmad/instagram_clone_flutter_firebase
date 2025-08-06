@@ -20,6 +20,7 @@ class AddPostScreen extends StatefulWidget {
 class _AddPostScreenState extends State<AddPostScreen> {
   final TextEditingController captionController = TextEditingController();
   Uint8List? _file;
+  bool _isLoading = false;
   _selectImage() {
     return showDialog(
       context: context,
@@ -56,6 +57,9 @@ class _AddPostScreenState extends State<AddPostScreen> {
   }
 
   postImage(String uid, String username, String profileUrl) async {
+    setState(() {
+      _isLoading = true;
+    });
     try {
       String message = await FirestoreMethods().uploadPost(
         captionController.text.trim(),
@@ -65,17 +69,33 @@ class _AddPostScreenState extends State<AddPostScreen> {
         profileUrl,
       );
       if (message == "Post Successfully Added!") {
+        setState(() {
+          _isLoading = false;
+        });
         showSnackBar(
           context: context,
           content: "Post Successfully Added!",
           clr: successColor,
         );
+        clearImage();
       } else {
+        setState(() {
+          _isLoading = false;
+        });
         showSnackBar(context: context, content: message, clr: errorColor);
       }
     } catch (err) {
+      setState(() {
+        _isLoading = false;
+      });
       showSnackBar(context: context, content: err.toString(), clr: errorColor);
     }
+  }
+
+  clearImage() {
+    setState(() {
+      _file = null;
+    });
   }
 
   @override
@@ -94,7 +114,10 @@ class _AddPostScreenState extends State<AddPostScreen> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: mobileBackgroundColor,
-          leading: Icon(Icons.arrow_back, color: primaryColor),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back, color: primaryColor),
+            onPressed: () => clearImage(),
+          ),
           title: MyText(text: "New post", textClr: primaryColor, textSize: 22),
           actions: [
             _file == null
@@ -128,6 +151,15 @@ class _AddPostScreenState extends State<AddPostScreen> {
                 : Center(
                   child: Column(
                     children: [
+                      _isLoading
+                          ? SizedBox(
+                            width: MediaQuery.of(context).size.width * 0.9,
+                            child: LinearProgressIndicator(
+                              borderRadius: BorderRadius.circular(10),
+                              color: blueColor,
+                            ),
+                          )
+                          : SizedBox.shrink(),
                       Padding(
                         padding: const EdgeInsets.only(top: 20, bottom: 10),
                         child: InkWell(
