@@ -1,6 +1,5 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:instagram_clone_flutter_firebase/models/users.dart';
+import 'package:instagram_clone_flutter_firebase/methods/firestore_methods.dart';
 import 'package:instagram_clone_flutter_firebase/providers/user_provider.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/like_animation.dart';
@@ -49,7 +48,12 @@ class _PostCardState extends State<PostCard> {
             ],
           ),
           GestureDetector(
-            onDoubleTap: () {
+            onDoubleTap: () async {
+              await FirestoreMethods().likePost(
+                widget.snap["postId"],
+                user!.uid,
+                widget.snap["likes"],
+              );
               setState(() {
                 isLikeAnimating = true;
               });
@@ -89,13 +93,22 @@ class _PostCardState extends State<PostCard> {
           Row(
             children: [
               GestureDetector(
-                onTap: () {},
+                onTap: () async {
+                  await FirestoreMethods().likePost(
+                    widget.snap["postId"],
+                    user.uid,
+                    widget.snap["likes"],
+                  );
+                },
                 child: Padding(
                   padding: const EdgeInsets.only(left: 10, right: 3),
                   child: LikeAnimation(
                     isAnimating: widget.snap["likes"].contains(user!.uid),
                     smallLike: true,
-                    child: Icon(Icons.favorite_border),
+                    child:
+                        widget.snap["likes"].contains(user.uid)
+                            ? Icon(Icons.favorite, color: errorColor, size: 28)
+                            : Icon(Icons.favorite_border, color: primaryColor),
                   ),
                 ),
               ),
@@ -107,21 +120,32 @@ class _PostCardState extends State<PostCard> {
               GestureDetector(
                 onTap: () {},
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 3),
-                  child: Icon(Icons.messenger_outline),
+                  padding: const EdgeInsets.only(left: 15, right: 3),
+                  child: Icon(
+                    Icons.messenger_outline,
+                    color: primaryColor,
+                    size: 28,
+                  ),
                 ),
               ),
               MyText(text: "18", textClr: primaryColor, textSize: 12),
               GestureDetector(
                 onTap: () {},
                 child: Padding(
-                  padding: const EdgeInsets.only(left: 10, right: 4),
-                  child: Icon(Icons.send),
+                  padding: const EdgeInsets.only(left: 15, right: 4),
+                  child: Icon(Icons.send, color: primaryColor, size: 28),
                 ),
               ),
               MyText(text: "32", textClr: primaryColor, textSize: 12),
               Spacer(),
-              IconButton(onPressed: () {}, icon: Icon(Icons.bookmark_border)),
+              IconButton(
+                onPressed: () {},
+                icon: Icon(
+                  Icons.bookmark_border,
+                  color: primaryColor,
+                  size: 28,
+                ),
+              ),
             ],
           ),
           Padding(
