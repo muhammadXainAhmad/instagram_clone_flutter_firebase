@@ -1,9 +1,11 @@
-import 'dart:typed_data';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:instagram_clone_flutter_firebase/methods/storage_methods.dart';
 import 'package:instagram_clone_flutter_firebase/models/comments.dart';
 import 'package:instagram_clone_flutter_firebase/models/posts.dart';
+import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
+import 'package:instagram_clone_flutter_firebase/utils/utils.dart';
 import 'package:uuid/uuid.dart';
 
 class FirestoreMethods {
@@ -90,5 +92,18 @@ class FirestoreMethods {
       message = err.toString();
     }
     return message;
+  }
+
+  Future<void> deletePost(BuildContext context, String postId) async {
+    try {
+      await _firestore.collection("posts").doc(postId).delete();
+      showSnackBar(
+        context: context,
+        content: "Post Successfully Deleted!",
+        clr: successColor,
+      );
+    } catch (err) {
+      showSnackBar(context: context, content: err.toString(), clr: errorColor);
+    }
   }
 }

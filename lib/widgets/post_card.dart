@@ -64,7 +64,30 @@ class _PostCardState extends State<PostCard> {
                 ),
               ),
               Spacer(),
-              IconButton(onPressed: () {}, icon: Icon(Icons.more_vert)),
+              IconButton(
+                onPressed: () {
+                  showDialog(
+                    context: context,
+                    builder: (context) {
+                      return SimpleDialog(
+                        children: [
+                          SimpleDialogOption(
+                            child: Text("Delete post"),
+                            onPressed: () async {
+                              await FirestoreMethods().deletePost(
+                                context,
+                                widget.snap["postId"],
+                              );
+                              Navigator.of(context).pop();
+                            },
+                          ),
+                        ],
+                      );
+                    },
+                  );
+                },
+                icon: Icon(Icons.more_vert),
+              ),
             ],
           ),
           GestureDetector(
