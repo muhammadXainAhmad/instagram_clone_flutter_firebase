@@ -38,7 +38,7 @@ class FeedScreen extends StatelessWidget {
         ],
       ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection("posts").snapshots(),
+        stream: FirebaseFirestore.instance.collection("posts").orderBy("postedDate",descending: true).snapshots(),
         builder: (
           context,
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshots,

@@ -1,14 +1,21 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:instagram_clone_flutter_firebase/methods/firestore_methods.dart';
 import 'package:instagram_clone_flutter_firebase/models/users.dart';
 import 'package:instagram_clone_flutter_firebase/providers/user_provider.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/text.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class CommentsBottomSheet extends StatefulWidget {
   final snap;
-  const CommentsBottomSheet({super.key, required this.snap});
+  final AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshot;
+  const CommentsBottomSheet({
+    super.key,
+    required this.snap,
+    required this.snapshot,
+  });
 
   @override
   State<CommentsBottomSheet> createState() => _CommentsBottomSheetState();
@@ -65,7 +72,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: 1,
+                  itemCount: widget.snapshot.data!.docs.length,
                   itemBuilder:
                       (context, index) => Column(
                         children: [
@@ -81,7 +88,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                                 CircleAvatar(
                                   radius: 16,
                                   backgroundImage: NetworkImage(
-                                    "https://i.pinimg.com/236x/74/67/ac/7467acd73768ec753f20c4ac6cf39441.jpg",
+                                    "${widget.snapshot.data!.docs[index]["profileUrl"]}",
                                   ),
                                 ),
                                 Padding(
@@ -94,7 +101,8 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                                         text: TextSpan(
                                           children: [
                                             TextSpan(
-                                              text: "Username    ",
+                                              text:
+                                                  "${widget.snapshot.data!.docs[index]["username"]}   ",
                                               style: TextStyle(
                                                 color: primaryColor,
                                                 fontWeight: FontWeight.bold,
@@ -102,7 +110,13 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                                               ),
                                             ),
                                             TextSpan(
-                                              text: "Aug 08, 2025",
+                                              text: DateFormat.yMMMd().format(
+                                                widget
+                                                    .snapshot
+                                                    .data!
+                                                    .docs[index]["commentDate"]
+                                                    .toDate(),
+                                              ),
                                               style: TextStyle(
                                                 color: secondaryColor,
                                                 fontSize: 13,
@@ -112,7 +126,8 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                                         ),
                                       ),
                                       MyText(
-                                        text: "Comment made by user",
+                                        text:
+                                            "${widget.snapshot.data!.docs[index]["commentText"]}",
                                         textClr: primaryColor,
                                         textSize: 14,
                                       ),
