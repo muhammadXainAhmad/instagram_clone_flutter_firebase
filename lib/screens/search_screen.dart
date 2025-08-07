@@ -24,18 +24,36 @@ class _SearchScreenState extends State<SearchScreen> {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: mobileBackgroundColor,
-        title: TextFormField(
-          style: TextStyle(color: primaryColor),
-          controller: searchController,
-          decoration: InputDecoration(
-            hintText: "Search for a user",
-            hintStyle: TextStyle(color: primaryColor),
+        title: SizedBox(
+          child: TextFormField(
+            style: TextStyle(color: primaryColor),
+            controller: searchController,
+            decoration: InputDecoration(
+              suffixIcon: GestureDetector(
+                onTap: () => searchController.clear(),
+                child: Icon(Icons.close, color: secondaryColor),
+              ),
+              contentPadding: EdgeInsets.symmetric(),
+              filled: true,
+              fillColor: mobileBackgroundColor,
+              enabledBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: secondaryColor, width: 2),
+              ),
+              focusedBorder: OutlineInputBorder(
+                borderRadius: BorderRadius.circular(10),
+                borderSide: BorderSide(color: blueColor, width: 2),
+              ),
+              hintText: "Search for a user",
+              hintStyle: TextStyle(color: secondaryColor),
+              prefixIcon: Icon(Icons.search, color: secondaryColor),
+            ),
+            onFieldSubmitted: (value) {
+              setState(() {
+                isShowUsers = true;
+              });
+            },
           ),
-          onFieldSubmitted: (value) {
-            setState(() {
-              isShowUsers = true;
-            });
-          },
         ),
       ),
       body:
@@ -59,10 +77,19 @@ class _SearchScreenState extends State<SearchScreen> {
                       itemCount: (snapshot.data! as dynamic).docs.length,
                       itemBuilder: (context, index) {
                         return ListTile(
-                          leading: CircleAvatar(
-                            backgroundImage: NetworkImage(
-                              (snapshot.data! as dynamic)
-                                  .docs[index]["photoUrl"],
+                          leading: Container(
+                            decoration: BoxDecoration(
+                              shape: BoxShape.circle,
+                              border: Border.all(
+                                color: secondaryColor,
+                                width: 1,
+                              ),
+                            ),
+                            child: CircleAvatar(
+                              backgroundImage: NetworkImage(
+                                (snapshot.data! as dynamic)
+                                    .docs[index]["photoUrl"],
+                              ),
                             ),
                           ),
                           title: Text(
@@ -81,17 +108,16 @@ class _SearchScreenState extends State<SearchScreen> {
                     return const Center(child: CircularProgressIndicator());
                   }
                   return MasonryGridView.builder(
+                    mainAxisSpacing: 8,
+                    crossAxisSpacing: 8,
                     gridDelegate:
                         SliverSimpleGridDelegateWithFixedCrossAxisCount(
                           crossAxisCount: 2,
                         ),
                     itemCount: snapshot.data!.docs.length,
                     itemBuilder:
-                        (context, index) => Padding(
-                          padding: const EdgeInsets.all(3.0),
-                          child: Image.network(
-                            (snapshot.data! as dynamic).docs[index]["postUrl"],
-                          ),
+                        (context, index) => Image.network(
+                          (snapshot.data! as dynamic).docs[index]["postUrl"],
                         ),
                   );
                 },

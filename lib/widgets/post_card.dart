@@ -49,9 +49,15 @@ class _PostCardState extends State<PostCard> {
             children: [
               Padding(
                 padding: const EdgeInsets.only(left: 10),
-                child: CircleAvatar(
-                  radius: 16,
-                  backgroundImage: NetworkImage(widget.snap["photoUrl"]),
+                child: Container(
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    border: Border.all(color: secondaryColor, width: 1),
+                  ),
+                  child: CircleAvatar(
+                    radius: 16,
+                    backgroundImage: NetworkImage(widget.snap["photoUrl"]),
+                  ),
                 ),
               ),
               Padding(

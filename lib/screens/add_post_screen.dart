@@ -168,7 +168,7 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             height: 250,
                             width: MediaQuery.of(context).size.width * 0.9,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),
+                              borderRadius: BorderRadius.circular(10),border: Border.all(color: secondaryColor),
                               image: DecorationImage(
                                 image: MemoryImage(_file!),
                                 fit: BoxFit.scaleDown,
