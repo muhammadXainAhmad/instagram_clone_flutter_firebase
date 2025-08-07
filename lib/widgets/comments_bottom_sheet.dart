@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:instagram_clone_flutter_firebase/methods/firestore_methods.dart';
+import 'package:instagram_clone_flutter_firebase/models/users.dart';
+import 'package:instagram_clone_flutter_firebase/providers/user_provider.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/text.dart';
+import 'package:provider/provider.dart';
 
 class CommentsBottomSheet extends StatefulWidget {
-  const CommentsBottomSheet({super.key});
+  final snap;
+  const CommentsBottomSheet({super.key, required this.snap});
 
   @override
   State<CommentsBottomSheet> createState() => _CommentsBottomSheetState();
@@ -12,6 +17,7 @@ class CommentsBottomSheet extends StatefulWidget {
 class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
   final TextEditingController commentController = TextEditingController();
   bool isTyping = false;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -31,6 +37,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
+    UserModel? user = Provider.of<UserProvider>(context).getUser;
     return SafeArea(
       child: Padding(
         padding: EdgeInsets.only(
@@ -58,7 +65,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
               ),
               Expanded(
                 child: ListView.builder(
-                  itemCount: 13,
+                  itemCount: 1,
                   itemBuilder:
                       (context, index) => Column(
                         children: [
@@ -136,16 +143,14 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                       padding: const EdgeInsets.only(right: 12),
                       child: CircleAvatar(
                         radius: 16,
-                        backgroundImage: NetworkImage(
-                          "https://i.pinimg.com/236x/74/67/ac/7467acd73768ec753f20c4ac6cf39441.jpg",
-                        ),
+                        backgroundImage: NetworkImage(user!.photoUrl),
                       ),
                     ),
                     Expanded(
                       child: TextField(
                         style: TextStyle(color: primaryColor, fontSize: 14),
                         decoration: InputDecoration(
-                          hintText: "Add a comment for postUsername ...",
+                          hintText: "Comment as ${user.username} ...",
                           hintStyle: TextStyle(
                             color: secondaryColor,
                             fontSize: 14,
@@ -154,6 +159,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                         ),
                         controller: commentController,
                         keyboardType: TextInputType.text,
+                        textCapitalization: TextCapitalization.sentences,
                       ),
                     ),
                     isTyping
@@ -167,9 +173,36 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                           ),
                           color: primaryColor,
                           iconSize: 28,
-                          tooltip: "Upload comment",
-                          onPressed: () {},
-                          icon: Icon(Icons.upload, color: primaryColor),
+                          tooltip: "Add comment",
+                          onPressed: () async {
+                            setState(() {
+                              _isLoading = true;
+                            });
+                            String message = await FirestoreMethods()
+                                .addComment(
+                                  widget.snap["postId"],
+                                  user.uid,
+                                  user.username,
+                                  user.photoUrl,
+                                  commentController.text.trim(),
+                                );
+                            setState(() {
+                              _isLoading = false;
+                            });
+                            if (message == "Comment Successfully Added!") {
+                              commentController.clear();
+                            }
+                          },
+                          icon:
+                              _isLoading
+                                  ? SizedBox(
+                                    width: 20,
+                                    height: 20,
+                                    child: CircularProgressIndicator(
+                                      color: primaryColor,
+                                    ),
+                                  )
+                                  : Icon(Icons.upload, color: primaryColor),
                         )
                         : SizedBox.shrink(),
                   ],

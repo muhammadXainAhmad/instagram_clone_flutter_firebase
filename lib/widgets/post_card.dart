@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:instagram_clone_flutter_firebase/methods/firestore_methods.dart';
 import 'package:instagram_clone_flutter_firebase/providers/user_provider.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
+import 'package:instagram_clone_flutter_firebase/widgets/comments_bottom_sheet.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/like_animation.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/text.dart';
 import 'package:intl/intl.dart';
@@ -118,7 +119,14 @@ class _PostCardState extends State<PostCard> {
                 textSize: 12,
               ),
               GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  showModalBottomSheet(
+                    context: context,
+                    isScrollControlled: true,
+                    useSafeArea: true,
+                    builder: (context) => CommentsBottomSheet(snap:widget.snap,),
+                  );
+                },
                 child: Padding(
                   padding: const EdgeInsets.only(left: 15, right: 3),
                   child: Icon(
