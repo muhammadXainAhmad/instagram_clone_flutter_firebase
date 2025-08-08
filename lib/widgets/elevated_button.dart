@@ -8,6 +8,11 @@ class MyElevatedButton extends StatelessWidget {
   final Color textClr;
   final bool isLoading;
   final VoidCallback onPressed;
+  final double height;
+  final double width;
+  final double radius;
+  final double fontSize;
+
   const MyElevatedButton({
     super.key,
     required this.buttonText,
@@ -16,6 +21,10 @@ class MyElevatedButton extends StatelessWidget {
     this.borderClr = mobileBackgroundColor,
     this.textClr = primaryColor,
     this.isLoading = false,
+    this.height = 50,
+    this.width = double.infinity,
+    this.radius = 20,
+    this.fontSize = 16,
   });
 
   @override
@@ -24,8 +33,10 @@ class MyElevatedButton extends StatelessWidget {
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
         backgroundColor: bgClr,
-        minimumSize: Size(double.infinity, 50),
-        side: BorderSide(color: borderClr, width: 2),
+        minimumSize: Size(width, height),
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(radius),
+        ),
       ),
       child:
           isLoading
@@ -37,7 +48,7 @@ class MyElevatedButton extends StatelessWidget {
               )
               : Text(
                 buttonText,
-                style: TextStyle(color: textClr, fontSize: 16),
+                style: TextStyle(color: textClr, fontSize: fontSize),
               ),
     );
   }

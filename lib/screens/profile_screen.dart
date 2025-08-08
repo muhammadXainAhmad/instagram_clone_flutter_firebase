@@ -1,16 +1,60 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
+import 'package:instagram_clone_flutter_firebase/utils/utils.dart';
+import 'package:instagram_clone_flutter_firebase/widgets/elevated_button.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/text.dart';
 
 class ProfileScreen extends StatefulWidget {
-  const ProfileScreen({super.key});
+  final String uid;
+
+  const ProfileScreen({super.key, required this.uid});
 
   @override
   State<ProfileScreen> createState() => _ProfileScreenState();
 }
 
 class _ProfileScreenState extends State<ProfileScreen> {
+  var userData = {};
+  int postLength = 0;
+  int followers = 0;
+  int following = 0;
+  bool isFollowing = false;
+  @override
+  void initState() {
+    super.initState();
+    getData();
+  }
+
+  getData() async {
+    try {
+      var postSnap =
+          await FirebaseFirestore.instance
+              .collection("posts")
+              .where("uid", isEqualTo: FirebaseAuth.instance.currentUser!.uid)
+              .get();
+
+      postLength = postSnap.docs.length;
+      var userSnap =
+          await FirebaseFirestore.instance
+              .collection("users")
+              .doc(widget.uid)
+              .get();
+      userData = userSnap.data()!;
+      followers = userSnap.data()!["followers"].length;
+      following = userSnap.data()!["followers"].length;
+      isFollowing = userSnap.data()!["followers"].contains(
+        FirebaseAuth.instance.currentUser!.uid,
+      );
+      setState(() {});
+    } catch (err) {
+      if (mounted) {
+        showSnackBar(context: context, content: err.toString());
+      }
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +68,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         ],
         title: MyText(
-          text: "Username",
+          text: userData["username"],
           textClr: primaryColor,
           textSize: 22,
           textWeight: FontWeight.bold,
@@ -45,9 +89,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     child: CircleAvatar(
                       radius: 40,
-                      backgroundImage: NetworkImage(
-                        "https://i.pinimg.com/236x/74/67/ac/7467acd73768ec753f20c4ac6cf39441.jpg",
-                      ),
+                      backgroundImage: NetworkImage(userData["photoUrl"]),
                     ),
                   ),
                   Expanded(
@@ -59,18 +101,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           Padding(
                             padding: const EdgeInsets.only(bottom: 5),
                             child: MyText(
-                              text: "Username",
+                              text: userData["username"],
                               textClr: primaryColor,
-                              textSize: 14,
+                              textSize: 15,
                               textWeight: FontWeight.bold,
                             ),
                           ),
                           Row(
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
-                              statColumn(0, "posts"),
-                              statColumn(700, "followers"),
-                              statColumn(365, "following"),
+                              statColumn(postLength, "posts"),
+                              statColumn(followers, "followers"),
+                              statColumn(following, "following"),
                             ],
                           ),
                         ],
@@ -80,62 +122,85 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ],
               ),
               Padding(
-                padding: const EdgeInsets.only(top: 5),
-                child: MyText(text: "Bio", textClr: primaryColor, textSize: 14),
+                padding: const EdgeInsets.only(top: 5, bottom: 5),
+                child: MyText(
+                  text: userData["bio"],
+                  textClr: primaryColor,
+                  textSize: 14,
+                ),
               ),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: secondaryColor.shade700,
-                        minimumSize: Size(double.infinity, 32),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                      child: Text(
-                        "Edit profile",
-                        style: TextStyle(color: primaryColor, fontSize: 14),
-                      ),
-                    ),
+                    child:
+                        FirebaseAuth.instance.currentUser!.uid == widget.uid
+                            ? MyElevatedButton(
+                              buttonText: "Edit profile",
+                              onPressed: () {},
+                              bgClr: secondaryColor.shade700,
+                              radius: 5,
+                              height: 35,
+                              fontSize: 14,
+                            )
+                            : isFollowing
+                            ? MyElevatedButton(
+                              buttonText: "Unfollow",
+                              onPressed: () {},
+                              textClr: Colors.black,
+                              bgClr: primaryColor,
+                              radius: 5,
+                              height: 35,
+                              fontSize: 14,
+                            )
+                            : MyElevatedButton(
+                              buttonText: "Follow",
+                              onPressed: () {},
+                              textClr: primaryColor,
+                              bgClr: blueColor,
+                              radius: 5,
+                              height: 35,
+                              fontSize: 14,
+                            ),
                   ),
                   SizedBox(width: 5),
                   Expanded(
-                    child: ElevatedButton(
-                      onPressed: () {},
-                      style: ElevatedButton.styleFrom(
-                        minimumSize: Size(double.infinity, 32),
-                        backgroundColor: secondaryColor.shade700,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(5),
-                        ),
-                      ),
-                      child: Text(
-                        "Share profile",
-                        style: TextStyle(color: primaryColor, fontSize: 14),
-                      ),
-                    ),
+                    child:
+                        FirebaseAuth.instance.currentUser!.uid == widget.uid
+                            ? MyElevatedButton(
+                              buttonText: "Share profile",
+                              onPressed: () {},
+                              bgClr: secondaryColor.shade700,
+                              radius: 5,
+                              height: 35,
+                              fontSize: 14,
+                            )
+                            : MyElevatedButton(
+                              buttonText: "Message",
+                              onPressed: () {},
+                              bgClr: secondaryColor.shade700,
+                              radius: 5,
+                              height: 35,
+                              fontSize: 14,
+                            ),
                   ),
                 ],
               ),
-              Expanded(
-                child: MasonryGridView.builder(
-                  mainAxisSpacing: 8,
-                  crossAxisSpacing: 8,
-                  gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 2,
-                  ),
-                  itemCount: 6,
-                  itemBuilder:
-                      (context, index) => Image.network(
-                        "https://img.freepik.com/free-photo/fuji-mountain-kawaguchiko-lake-morning-autumn-seasons-fuji-mountain-yamanachi-japan_335224-102.jpg?semt=ais_hybrid&w=740&q=80",
-                        fit: BoxFit.cover,
-                      ),
-                ),
-              ),
+              // Expanded(
+              //   child: MasonryGridView.builder(
+              //     mainAxisSpacing: 8,
+              //     crossAxisSpacing: 8,
+              //     gridDelegate: SliverSimpleGridDelegateWithFixedCrossAxisCount(
+              //       crossAxisCount: 2,
+              //     ),
+              //     itemCount: 6,
+              //     itemBuilder:
+              //         (context, index) => Image.network(
+              //           "https://img.freepik.com/free-photo/fuji-mountain-kawaguchiko-lake-morning-autumn-seasons-fuji-mountain-yamanachi-japan_335224-102.jpg?semt=ais_hybrid&w=740&q=80",
+              //           fit: BoxFit.cover,
+              //         ),
+              //   ),
+              // ),
             ],
           ),
         ),
