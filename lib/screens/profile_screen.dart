@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone_flutter_firebase/methods/firestore_methods.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
 import 'package:instagram_clone_flutter_firebase/utils/utils.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/elevated_button.dart';
@@ -46,7 +47,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               .get();
       userData = userSnap.data()!;
       followers = userSnap.data()!["followers"].length;
-      following = userSnap.data()!["followers"].length;
+      following = userSnap.data()!["following"].length;
       isFollowing = userSnap.data()!["followers"].contains(
         FirebaseAuth.instance.currentUser!.uid,
       );
@@ -155,7 +156,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 : isFollowing
                                 ? MyElevatedButton(
                                   buttonText: "Unfollow",
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    await FirestoreMethods().followUser(
+                                      uid:
+                                          FirebaseAuth
+                                              .instance
+                                              .currentUser!
+                                              .uid,
+                                      followId: userData["uid"],
+                                    );
+                                    setState(() {
+                                      isFollowing = false;
+                                      followers--;
+                                    });
+                                  },
                                   textClr: Colors.black,
                                   bgClr: primaryColor,
                                   radius: 5,
@@ -164,7 +178,20 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 )
                                 : MyElevatedButton(
                                   buttonText: "Follow",
-                                  onPressed: () {},
+                                  onPressed: () async {
+                                    await FirestoreMethods().followUser(
+                                      uid:
+                                          FirebaseAuth
+                                              .instance
+                                              .currentUser!
+                                              .uid,
+                                      followId: userData["uid"],
+                                    );
+                                    setState(() {
+                                      isFollowing = true;
+                                      followers++;
+                                    });
+                                  },
                                   textClr: primaryColor,
                                   bgClr: blueColor,
                                   radius: 5,
