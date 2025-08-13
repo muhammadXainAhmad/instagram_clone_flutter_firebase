@@ -6,6 +6,7 @@ import 'package:instagram_clone_flutter_firebase/responsive/mobile_screen_layout
 import 'package:instagram_clone_flutter_firebase/responsive/web_screen_layout.dart';
 import 'package:instagram_clone_flutter_firebase/screens/signup1_email.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
+import 'package:instagram_clone_flutter_firebase/utils/global_variables.dart';
 import 'package:instagram_clone_flutter_firebase/utils/utils.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/elevated_button.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/text_button.dart';
@@ -34,7 +35,12 @@ class _LoginScreenState extends State<LoginScreen> {
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.only(left: 20, right: 20),
+          padding:
+              MediaQuery.of(context).size.width > webScreenSize
+                  ? EdgeInsets.symmetric(
+                    horizontal: MediaQuery.of(context).size.width / 3,
+                  )
+                  : const EdgeInsets.only(left: 20, right: 20),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -87,7 +93,11 @@ class _LoginScreenState extends State<LoginScreen> {
                       );
                     } else {
                       if (mounted) {
-                        showSnackBar(context: context,content: message,clr: errorColor);
+                        showSnackBar(
+                          context: context,
+                          content: message,
+                          clr: errorColor,
+                        );
                       }
                     }
                   },

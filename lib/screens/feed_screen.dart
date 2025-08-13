@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:instagram_clone_flutter_firebase/providers/user_provider.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
+import 'package:instagram_clone_flutter_firebase/utils/global_variables.dart';
 import 'package:instagram_clone_flutter_firebase/widgets/post_card.dart';
 import 'package:provider/provider.dart';
 
@@ -21,24 +22,34 @@ class FeedScreen extends StatelessWidget {
         ),
       );
     }
+    final width = MediaQuery.of(context).size.width;
     return Scaffold(
-      appBar: AppBar(
-        backgroundColor: mobileBackgroundColor,
-        title: SvgPicture.asset(
-          "assets/instagramLogo.svg",
-          color: primaryColor,
-          height: 32,
-          width: 32,
-        ),
-        actions: [
-          IconButton(
-            onPressed: () {},
-            icon: const Icon(Icons.message, color: primaryColor),
-          ),
-        ],
-      ),
+      backgroundColor:
+          width > webScreenSize ? webBackgroundColor : mobileBackgroundColor,
+      appBar:
+          width > webScreenSize
+              ? null
+              : AppBar(
+                backgroundColor: mobileBackgroundColor,
+                title: SvgPicture.asset(
+                  "assets/instagramLogo.svg",
+                  color: primaryColor,
+                  height: 32,
+                  width: 32,
+                ),
+                actions: [
+                  IconButton(
+                    onPressed: () {},
+                    icon: const Icon(Icons.message, color: primaryColor),
+                  ),
+                ],
+              ),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection("posts").orderBy("postedDate",descending: true).snapshots(),
+        stream:
+            FirebaseFirestore.instance
+                .collection("posts")
+                .orderBy("postedDate", descending: true)
+                .snapshots(),
         builder: (
           context,
           AsyncSnapshot<QuerySnapshot<Map<String, dynamic>>> snapshots,
@@ -49,8 +60,13 @@ class FeedScreen extends StatelessWidget {
           return ListView.builder(
             itemCount: snapshots.data!.docs.length,
             itemBuilder:
-                (context, index) =>
-                    PostCard(snap: snapshots.data!.docs[index].data()),
+                (context, index) => Container(
+                  margin: EdgeInsets.symmetric(
+                    horizontal: width > webScreenSize ? width * 0.3 : 0,
+                    vertical: width > webScreenSize ? 15 : 0,
+                  ),
+                  child: PostCard(snap: snapshots.data!.docs[index].data()),
+                ),
           );
         },
       ),
