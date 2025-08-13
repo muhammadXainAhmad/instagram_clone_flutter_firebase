@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:instagram_clone_flutter_firebase/methods/auth_methods.dart';
 import 'package:instagram_clone_flutter_firebase/methods/firestore_methods.dart';
 import 'package:instagram_clone_flutter_firebase/utils/colors.dart';
 import 'package:instagram_clone_flutter_firebase/utils/utils.dart';
@@ -204,8 +205,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                         child:
                             FirebaseAuth.instance.currentUser!.uid == widget.uid
                                 ? MyElevatedButton(
-                                  buttonText: "Share profile",
-                                  onPressed: () {},
+                                  buttonText: "Sign Out",
+                                  onPressed: () async {
+                                    await AuthMethods().signOut();
+                                  },
                                   bgClr: secondaryColor.shade700,
                                   radius: 5,
                                   height: 35,
@@ -213,7 +216,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 )
                                 : MyElevatedButton(
                                   buttonText: "Message",
-                                  onPressed: () {},
+                                  onPressed: () {}, 
                                   bgClr: secondaryColor.shade700,
                                   radius: 5,
                                   height: 35,
