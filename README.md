@@ -109,6 +109,15 @@ The app offers essential social media features like user authentication, posting
 <img src="screenshots/Search1.jpg" width="300"/>
 <img src="screenshots/Search2.jpg" width="300"/>
 </p>
+
+### **Firebase Auth, Firestore, Storage**
+<p>
+<img src="screenshots/users.png"/>
+<img src="screenshots/userCollection.png"/>
+<img src="screenshots/profilePics.png"/>
+<img src="screenshots/posts.png"/>
+<img src="screenshots/postData.png"/>
+</p>
 ---
 
 ## Dependencies 📦
