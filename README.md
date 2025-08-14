@@ -2,6 +2,7 @@
 
 A minimal yet powerful **Instagram-like** Flutter application built with **Flutter**, **Firebase Auth**, **Cloud Firestore**, **Firebase Storage**, and a touch of **Provider** for state management.  
 The app offers essential social media features like user authentication, posting images, liking posts, leaving comments, following/unfollowing users, searching profiles, and a responsive UI that works across devices.
+
 ---
 
 ## Features 🚀
