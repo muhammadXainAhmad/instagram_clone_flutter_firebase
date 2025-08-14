@@ -223,7 +223,7 @@ class _PostCardState extends State<PostCard> {
                   child: Icon(Icons.send, color: primaryColor, size: 28),
                 ),
               ),
-              MyText(text: "32", textClr: primaryColor, textSize: 12),
+              MyText(text: "0", textClr: primaryColor, textSize: 12),
               Spacer(),
               IconButton(
                 onPressed: () {},
