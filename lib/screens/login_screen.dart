@@ -81,18 +81,20 @@ class _LoginScreenState extends State<LoginScreen> {
                       _isLoading = false;
                     });
                     if (message == "User Logged In Successfully!") {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder:
-                              (context) => const ResponsiveLayout(
-                                webScreenLayout: WebScreenLayout(),
-                                mobileScreenLayout: MobileScreenLayout(),
-                              ),
-                        ),
-                      );
+                      if (context.mounted) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (context) => const ResponsiveLayout(
+                                  webScreenLayout: WebScreenLayout(),
+                                  mobileScreenLayout: MobileScreenLayout(),
+                                ),
+                          ),
+                        );
+                      }
                     } else {
-                      if (mounted) {
+                      if (context.mounted) {
                         showSnackBar(
                           context: context,
                           content: message,

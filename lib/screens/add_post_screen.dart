@@ -72,23 +72,33 @@ class _AddPostScreenState extends State<AddPostScreen> {
         setState(() {
           _isLoading = false;
         });
-        showSnackBar(
-          context: context,
-          content: "Post Successfully Added!",
-          clr: successColor,
-        );
+        if (mounted) {
+          showSnackBar(
+            context: context,
+            content: "Post Successfully Added!",
+            clr: successColor,
+          );
+        }
         clearImage();
       } else {
         setState(() {
           _isLoading = false;
         });
-        showSnackBar(context: context, content: message, clr: errorColor);
+        if (mounted) {
+          showSnackBar(context: context, content: message, clr: errorColor);
+        }
       }
     } catch (err) {
       setState(() {
         _isLoading = false;
       });
-      showSnackBar(context: context, content: err.toString(), clr: errorColor);
+      if (mounted) {
+        showSnackBar(
+          context: context,
+          content: err.toString(),
+          clr: errorColor,
+        );
+      }
     }
   }
 
@@ -168,7 +178,8 @@ class _AddPostScreenState extends State<AddPostScreen> {
                             height: 250,
                             width: MediaQuery.of(context).size.width * 0.9,
                             decoration: BoxDecoration(
-                              borderRadius: BorderRadius.circular(10),border: Border.all(color: secondaryColor),
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(color: secondaryColor),
                               image: DecorationImage(
                                 image: MemoryImage(_file!),
                                 fit: BoxFit.scaleDown,

@@ -84,7 +84,9 @@ class _PostCardState extends State<PostCard> {
                                 context,
                                 widget.snap["postId"],
                               );
-                              Navigator.of(context).pop();
+                              if (context.mounted) {
+                                Navigator.of(context).pop();
+                              }
                             },
                           ),
                         ],

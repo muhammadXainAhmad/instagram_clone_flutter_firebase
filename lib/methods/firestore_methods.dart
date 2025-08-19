@@ -97,13 +97,21 @@ class FirestoreMethods {
   Future<void> deletePost(BuildContext context, String postId) async {
     try {
       await _firestore.collection("posts").doc(postId).delete();
-      showSnackBar(
-        context: context,
-        content: "Post Successfully Deleted!",
-        clr: successColor,
-      );
+      if (context.mounted) {
+        showSnackBar(
+          context: context,
+          content: "Post Successfully Deleted!",
+          clr: successColor,
+        );
+      }
     } catch (err) {
-      showSnackBar(context: context, content: err.toString(), clr: errorColor);
+      if (context.mounted) {
+        showSnackBar(
+          context: context,
+          content: err.toString(),
+          clr: errorColor,
+        );
+      }
     }
   }
 

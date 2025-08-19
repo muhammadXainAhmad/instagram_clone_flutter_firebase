@@ -100,7 +100,7 @@ class _SignupUsernameState extends State<SignupUsername> {
                       _isLoading = false;
                     });
                     if (message != "User Created Successfully!") {
-                      if (mounted) {
+                      if (context.mounted) {
                         showSnackBar(
                           context: context,
                           content: message,
@@ -108,16 +108,18 @@ class _SignupUsernameState extends State<SignupUsername> {
                         );
                       }
                     } else {
-                      Navigator.pushReplacement(
-                        context,
-                        MaterialPageRoute(
-                          builder:
-                              (context) => const ResponsiveLayout(
-                                webScreenLayout: WebScreenLayout(),
-                                mobileScreenLayout: MobileScreenLayout(),
-                              ),
-                        ),
-                      );
+                      if (context.mounted) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(
+                            builder:
+                                (context) => const ResponsiveLayout(
+                                  webScreenLayout: WebScreenLayout(),
+                                  mobileScreenLayout: MobileScreenLayout(),
+                                ),
+                          ),
+                        );
+                      }
                     }
                   },
                   buttonText: "Sign Up",
