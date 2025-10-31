@@ -163,7 +163,7 @@ This project uses the following dependencies:
 
 ### Clone and Run
    ```bash
-   git clone https://github.com/yourusername/instagram_clone_flutter.git
+   git clone https://github.com/muhammadXainAhmad/instagram_clone_flutter_firebase
    cd instagram-clone-flutter
    flutter pub get
    flutter run
